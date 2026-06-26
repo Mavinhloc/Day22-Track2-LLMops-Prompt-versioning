@@ -47,6 +47,10 @@ OPENROUTER_API_KEY  = os.getenv("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL    = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
+# ── Groq ──────────────────────────────────────────────────────────────────
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL   = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+
 # ── LangSmith ─────────────────────────────────────────────────────────────
 LANGSMITH_API_KEY = os.getenv("LANGCHAIN_API_KEY", "")
 LANGSMITH_PROJECT = os.getenv("LANGCHAIN_PROJECT", "day22-lab")
@@ -70,6 +74,8 @@ def validate() -> bool:
         missing.append("ANTHROPIC_API_KEY")
     elif PROVIDER == "openrouter" and not OPENROUTER_API_KEY:
         missing.append("OPENROUTER_API_KEY")
+    elif PROVIDER == "groq" and not GROQ_API_KEY:
+        missing.append("GROQ_API_KEY")
     # Ollama: không cần API key
 
     if missing:

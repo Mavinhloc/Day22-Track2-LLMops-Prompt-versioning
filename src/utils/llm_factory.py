@@ -79,10 +79,20 @@ def get_llm(provider: str = None, temperature: float = 0.0):
             temperature=temperature,
         )
 
+    elif provider == "groq":
+        # Groq dùng OpenAI-compatible API
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(
+            model=config.GROQ_MODEL,
+            api_key=config.GROQ_API_KEY,
+            base_url="https://api.groq.com/openai/v1",
+            temperature=temperature,
+        )
+
     else:
         raise ValueError(
             f"Provider không hợp lệ: '{provider}'. "
-            "Chọn một trong: openai, gemini, anthropic, ollama, openrouter"
+            "Chọn một trong: openai, gemini, anthropic, ollama, openrouter, groq"
         )
 
 
@@ -138,8 +148,16 @@ def get_embeddings(provider: str = None):
             base_url=config.OLLAMA_BASE_URL,
         )
 
+    elif provider == "groq":
+        # Groq không có Embeddings API → dùng HuggingFace local (miễn phí, không cần key)
+        try:
+            from langchain_huggingface import HuggingFaceEmbeddings
+        except ImportError:
+            from langchain_community.embeddings import HuggingFaceEmbeddings
+        return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
     else:
         raise ValueError(
             f"Provider không hợp lệ: '{provider}'. "
-            "Chọn một trong: openai, gemini, anthropic, ollama, openrouter"
+            "Chọn một trong: openai, gemini, anthropic, ollama, openrouter, groq"
         )
